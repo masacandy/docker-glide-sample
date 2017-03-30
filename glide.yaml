@@ -1,0 +1,4 @@
+package: mygo
+import:
+- package: github.com/cihub/seelog
+  version: ^2.6.0
