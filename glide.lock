@@ -1,6 +1,0 @@
-hash: 89df39ea346bd6eb4dd04c60d82d4369ac504f571a3611e265c71bf9f82b3812
-updated: 2017-03-30T17:54:52.671579002+09:00
-imports:
-- name: github.com/cihub/seelog
-  version: d2c6e5aa9fbfdd1c624e140287063c7730654115
-testImports: []

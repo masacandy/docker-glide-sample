@@ -4,9 +4,11 @@ package main
 import (
 	"fmt"
 	log "github.com/cihub/seelog"
-	"html"
+	//	"html"
 	"net/http"
 	"os"
+	//	"io/ioutil"
+	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 // ログの設定
@@ -39,8 +41,19 @@ func main() {
 	defer log.Flush()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Info("Hello from SeeLog")
-		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+		client, err := elastic.NewClient(elastic.SetURL("http://elasticsearch:9200"))
+		if err != nil {
+			// Handle error
+			panic(err)
+		}
+
+		esversion, err := client.ElasticsearchVersion("http://elasticsearch:9200")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(w, "%s", esversion)
+
+		log.Info(esversion)
 	})
 
 	log.Error(http.ListenAndServe(":8080", nil))

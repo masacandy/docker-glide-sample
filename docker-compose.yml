@@ -2,9 +2,18 @@ version: '2'
 
 services:
   app:
-    image: 'golang:1.7.5-onbuild'
-    volumes:
-      - '.:/go/src/app'
+    build: .
     ports:
       - '8080:8080'
+    volumes:
+      - .:/go/src/docker-glide-sample
+    links:
+      - elasticsearch
     command: 'go run main.go'
+
+  elasticsearch:
+    image: 'elasticsearch:5'
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+
