@@ -6,7 +6,7 @@ ENV GOBIN /go/bin
 # build directories
 # RUN mkdir /app
 RUN mkdir /go/src/docker-glide-sample
-ADD . /go/src/docker-glide-sample
+COPY . /go/src/docker-glide-sample
 WORKDIR /go/src/docker-glide-sample
 
 # Go dep!
