@@ -4,7 +4,7 @@ FROM golang:1.8
 ENV GOBIN /go/bin
 
 # build directories
-RUN mkdir /app
+# RUN mkdir /app
 RUN mkdir /go/src/docker-glide-sample
 ADD . /go/src/docker-glide-sample
 WORKDIR /go/src/docker-glide-sample
