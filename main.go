@@ -4,10 +4,11 @@ package main
 import (
 	"fmt"
 	log "github.com/cihub/seelog"
-	//	"html"
+	"net"
 	"net/http"
+	"net/http/fcgi"
 	"os"
-	//	"io/ioutil"
+
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -36,25 +37,30 @@ func initLogger() {
 	log.ReplaceLogger(logger)
 }
 
+func handler(resp http.ResponseWriter, req *http.Request) {
+	client, err := elastic.NewClient(elastic.SetURL("http://elasticsearch:9200"))
+	if err != nil {
+		panic(err)
+	}
+
+	esversion, err := client.ElasticsearchVersion("http://elasticsearch:9200")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Fprintf(resp, "<h1>%s</h1>", esversion)
+
+	log.Info(esversion)
+}
+
 func main() {
 	initLogger()
 	defer log.Flush()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		client, err := elastic.NewClient(elastic.SetURL("http://elasticsearch:9200"))
-		if err != nil {
-			// Handle error
-			panic(err)
-		}
+	listener, err := net.Listen("tcp", ":9000")
+	if err != nil {
+		panic(err)
+	}
 
-		esversion, err := client.ElasticsearchVersion("http://elasticsearch:9200")
-		if err != nil {
-			panic(err)
-		}
-		fmt.Fprintf(w, "%s", esversion)
-
-		log.Info(esversion)
-	})
-
-	log.Error(http.ListenAndServe(":8080", nil))
+	http.HandleFunc("/", handler)
+	fcgi.Serve(listener, nil)
 }

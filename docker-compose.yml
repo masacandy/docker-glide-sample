@@ -4,7 +4,7 @@ services:
   app:
     build: .
     ports:
-      - '8080:8080'
+      - 9000:9000
     volumes:
       - .:/go/src/docker-glide-sample
     links:
@@ -12,8 +12,19 @@ services:
     command: 'go run main.go'
 
   elasticsearch:
-    image: 'elasticsearch:5'
+    image: elasticsearch:5
     ports:
-      - '9200:9200'
-      - '9300:9300'
+      - 9200:9200
+      - 9300:9300
 
+  webserver:
+    image: nginx:latest
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/conf.d/default.conf.template
+    ports:
+      - 8080:80
+    links:
+      - app
+    environment:
+      - APP=app
+    command: /bin/sh -c "envsubst '$$APP' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
