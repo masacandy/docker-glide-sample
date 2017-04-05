@@ -5,17 +5,21 @@ ENV GOBIN /go/bin
 
 # build directories
 # RUN mkdir /app
-RUN mkdir /go/src/docker-glide-sample
-COPY . /go/src/docker-glide-sample
-WORKDIR /go/src/docker-glide-sample
+RUN mkdir /go/src/docker-go-es-nginx-sample
+
+ENV APP_ROOT /go/src/docker-go-es-nginx-sample
+
+WORKDIR $APP_ROOT
+
+COPY main.go $APP_ROOT
 
 # Go dep!
 RUN go get -u github.com/golang/dep/...
 
-# ADD manifest.json manifest.json
-# ADD lock.json lock.json
+RUN dep init -v
 
-RUN dep ensure -update
+RUN dep ensure -update -v
 
+COPY . $APP_ROOT
 # Build my app
 # RUN go build -o /app/main .
