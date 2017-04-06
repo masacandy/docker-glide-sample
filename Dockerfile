@@ -23,5 +23,6 @@ RUN dep init -v
 RUN dep ensure -update -v
 
 COPY . $APP_ROOT
+
 # Build my app
 # RUN go build -o /app/main .
