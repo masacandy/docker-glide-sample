@@ -13,7 +13,7 @@ ENV APP_ROOT /go/src/docker-go-es-nginx-sample
 
 WORKDIR $APP_ROOT
 
-COPY main.go $APP_ROOT
+COPY . $APP_ROOT
 
 # Go dep!
 RUN go get -u github.com/golang/dep/...
@@ -21,8 +21,6 @@ RUN go get -u github.com/golang/dep/...
 RUN dep init -v
 
 RUN dep ensure -update -v
-
-COPY . $APP_ROOT
 
 # Build my app
 # RUN go build -o /app/main .
