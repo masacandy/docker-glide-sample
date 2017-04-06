@@ -22,5 +22,8 @@ RUN dep init -v
 
 RUN dep ensure -update -v
 
+RUN go build ./main.go
+
+EXPOSE 9000
 # Build my app
 # RUN go build -o /app/main .

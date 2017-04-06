@@ -3,13 +3,9 @@ version: '2'
 services:
   app:
     build: .
-    ports:
-      - 9000:9000
-    volumes:
-      - .:/go/src/docker-glide-sample
     links:
       - elasticsearch
-    command: 'go run main.go'
+    command: './main'
 
   elasticsearch:
     image: elasticsearch:5
